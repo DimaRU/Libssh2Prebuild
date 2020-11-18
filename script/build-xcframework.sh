@@ -46,7 +46,7 @@ export BUILD_THREADS=$(sysctl hw.ncpu | awk '{print $2}')
 LIBSSH_TAG=1.9.0
 LIBSSL_TAG=OpenSSL_1_1_1h
 
-TAG=$LIBSSH_TAG-$LIBSSL_TAG
+TAG=$LIBSSH_TAG+$LIBSSL_TAG
 ZIPNAME=CSSH-$TAG.xcframework.zip
 GIT_REMOTE_URL_UNFINISHED=`git config --get remote.origin.url|sed "s=^ssh://==; s=^https://==; s=:=/=; s/git@//; s/.git$//;"`
 DOWNLOAD_URL=https://$GIT_REMOTE_URL_UNFINISHED/releases/download/$TAG/$ZIPNAME
