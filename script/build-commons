@@ -7,9 +7,10 @@
 buildFatLibrary () {
   local inputs=$1
   local output=$2
-  local dirname=`dirname "$2"`
+  local dirname=$(dirname "$2")
 
   mkdir -p "$dirname" || true
+  echo "lipo creating $output with $inputs"
   lipo -create $inputs -output "$output"
 }
 
