@@ -13,12 +13,15 @@ if [[ -f "$BUILT_PRODUCTS_DIR/lib/libssl.a" ]]; then
     exit 0
 fi
 
-export CLANG=`xcrun --find clang`
-export DEVELOPER=`xcode-select --print-path`
-mkdir -p $BUILT_PRODUCTS_DIR
+CLANG=$(xcrun --find clang)
+export CLANG
+DEVELOPER=$(xcode-select --print-path)
+export DEVELOPER
+mkdir -p "$BUILT_PRODUCTS_DIR"
 
 for ARCH in $ARCHS
 do
+    echo "Building $ARCH for $SDK_PLATFORM $EFFECTIVE_PLATFORM_NAME"
     if [[ "$SDK_PLATFORM" == "macosx" ]]; then
       CONF="no-shared"
     else
@@ -38,7 +41,7 @@ do
     cp -R "$OPENSSL_SOURCE" "$OPENSSLDIR"
     cd "$OPENSSLDIR"
 
-    touch $LOG
+    touch "$LOG"
     echo "LOG: $LOG"
 
     if [[ "$SDK_PLATFORM" == "macosx" ]]; then
@@ -62,10 +65,15 @@ do
     export CROSS_SDK="$PLATFORM.sdk"
     export SDKROOT="$CROSS_TOP/SDKs/$CROSS_SDK"
     export CC="$CLANG -arch $ARCH"
+    export BITCODE_GENERATION_MODE=bitcode
+    export CFLAGS="$CFLAGS -fembed-bitcode"
 
     CONF="$CONF -m$SDK_PLATFORM-version-min=$MIN_VERSION"
 
-    ./Configure $HOST $CONF >> "$LOG" 2>&1
+    {
+      # split $CONF by space into parameter list
+      ./Configure $HOST $CONF
+    } >> "$LOG" 2>&1
 
     if [[ "$ARCH" == "x86_64" ]]; then
       sed -ie "s!^CFLAG=!CFLAG=-isysroot $SDKROOT !" "Makefile"

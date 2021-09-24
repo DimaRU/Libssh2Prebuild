@@ -13,9 +13,11 @@ if [[ -f "$BUILT_PRODUCTS_DIR/lib/libssh2.a" ]]; then
     exit 0
 fi
 
-export CLANG=`xcrun --find clang`
-export DEVELOPER=`xcode-select --print-path`
-mkdir -p $BUILT_PRODUCTS_DIR
+CLANG=$(xcrun --find clang)
+export CLANG
+DEVELOPER=$(xcode-select --print-path)
+export DEVELOPER
+mkdir -p "$BUILT_PRODUCTS_DIR"
 
 for ARCH in $ARCHS
 do
@@ -30,7 +32,7 @@ do
     cp -R "$LIBSSH_SOURCE" "$PLATFORM_SRC"
     cd "$PLATFORM_SRC"
 
-    touch $LOG
+    touch "$LOG"
     echo "LOG: $LOG"
     
     if [[ "$ARCH" == arm64* ]]; then
@@ -57,7 +59,24 @@ do
       CRYPTO_BACKEND_OPTION="--with-openssl"
     fi
 
-    ./configure --host=$HOST --prefix="$PLATFORM_OUT" --disable-debug --disable-dependency-tracking --disable-silent-rules --disable-examples-build --without-libz $CRYPTO_BACKEND_OPTION --with-libssl-prefix="$OPENSSLDIR" --disable-shared --enable-static  >> "$LOG" 2>&1
+    export BITCODE_GENERATION_MODE=bitcode
+    export CFLAGS="$CFLAGS -fembed-bitcode"
+    
+    {
+      {
+        ./configure \
+          --host="$HOST" \
+          --prefix="$PLATFORM_OUT" \
+          --disable-debug \
+          --disable-dependency-tracking \
+          --disable-silent-rules \
+          --disable-examples-build \
+          --without-libz "$CRYPTO_BACKEND_OPTION" \
+          --with-libssl-prefix="$OPENSSLDIR" \
+          --disable-shared \
+          --enable-static 
+      } >> "$LOG" 
+    } 2>&1
 
     make >> "$LOG" 2>&1
     make -j "$BUILD_THREADS" install >> "$LOG" 2>&1
