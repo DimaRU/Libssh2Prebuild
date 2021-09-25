@@ -1,5 +1,5 @@
 # Libssh2Prebuild
-## Libssh2 with OpenSSL crypto prebuilt library backend for Apple platforms. Apple Silicon supported.
+## Libssh2 with OpenSSL crypto backend prebuilt library for Apple platforms. Apple Silicon supported.
 
 
 ### Supported platforms and architectures
