@@ -1,4 +1,4 @@
-Libssh2 1.9.0 build.
+Libssh2 1.10.0 build.
 
 ### Supported platforms and architectures
 | Platform          |  Architectures     |

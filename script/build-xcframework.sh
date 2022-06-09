@@ -46,7 +46,8 @@ set -e
 BUILD_THREADS=$(sysctl hw.ncpu | awk '{print $2}')
 export BUILD_THREADS
 LIBSSH_TAG=1.10.0
-LIBSSL_TAG=OpenSSL_1_1_1l
+LIBSSL_TAG=OpenSSL_1_1_1o
+DATE="2021-08-29 22:38:36 +0200"
 
 TAG=$LIBSSH_TAG+$LIBSSL_TAG
 ZIPNAME=CSSH-$TAG.xcframework.zip
@@ -112,7 +113,11 @@ xcodebuild -create-xcframework \
  -headers "$BUILD/watchos/include" \
  -output CSSH.xcframework
 
-zip --recurse-paths -X --quiet $ZIPNAME CSSH.xcframework
+XCODE_VER="Archive date:$DATE"
+XCODE_VER+=$'\n'
+XCODE_VER+=$(xcodebuild -version 2>&1| tail -n 2)
+echo $XCODE_VER
+xczip CSSH.xcframework --iso-date "$DATE" -o $ZIPNAME -c "$XCODE_VER"
 rm -rf CSSH.xcframework
 CHECKSUM=$(shasum -a 256 -b $ZIPNAME | awk '{print $1}')
 
