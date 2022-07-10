@@ -91,8 +91,6 @@ buildLibrary "$BUILD/macosx" "macosx" "MacOSX" "" "x86_64 arm64" "10.10"
 buildLibrary "$BUILD/maccatalyst" "macosx" "MacOSX" "-maccatalyst" "x86_64 arm64" "10.15"
 buildLibrary "$BUILD/appletvsimulator" "appletvsimulator" "AppleTVSimulator" "" "x86_64 arm64" "9.0"
 buildLibrary "$BUILD/appletvos" "appletvos" "AppleTVOS" "" "arm64" "9.0"
-buildLibrary "$BUILD/watchsimulator" "watchsimulator" "WatchSimulator" "" "x86_64 arm64" "2.0"
-buildLibrary "$BUILD/watchos" "watchos" "WatchOS" "" "armv7k arm64_32" "2.0"
 
 xcodebuild -create-xcframework \
  -library "$BUILD/macosx/lib/libssh2.a" \
@@ -107,10 +105,6 @@ xcodebuild -create-xcframework \
  -headers "$BUILD/appletvsimulator/include" \
  -library "$BUILD/appletvos/lib/libssh2.a" \
  -headers "$BUILD/appletvos/include" \
- -library "$BUILD/watchsimulator/lib/libssh2.a" \
- -headers "$BUILD/watchsimulator/include" \
- -library "$BUILD/watchos/lib/libssh2.a" \
- -headers "$BUILD/watchos/include" \
  -output CSSH.xcframework
 
 XCODE_VER="Archive date:$DATE"
