@@ -86,10 +86,10 @@ fi
 #export MIN_VERSION=$6
 
 buildLibrary "$BUILD/iphoneos" "iphoneos" "iPhoneOS" "" "armv7 armv7s arm64" "9.0"
-buildLibrary "$BUILD/iphonesimulator" "iphonesimulator" "iPhoneSimulator" "" "x86_64 arm64" "9.0"
-buildLibrary "$BUILD/macosx" "macosx" "MacOSX" "" "x86_64 arm64" "10.10"
-buildLibrary "$BUILD/maccatalyst" "macosx" "MacOSX" "-maccatalyst" "x86_64 arm64" "10.15"
-buildLibrary "$BUILD/appletvsimulator" "appletvsimulator" "AppleTVSimulator" "" "x86_64 arm64" "9.0"
+buildLibrary "$BUILD/iphonesimulator" "iphonesimulator" "iPhoneSimulator" "" "arm64" "9.0"
+buildLibrary "$BUILD/macosx" "macosx" "MacOSX" "" "arm64" "10.10"
+buildLibrary "$BUILD/maccatalyst" "macosx" "MacOSX" "-maccatalyst" "arm64" "10.15"
+buildLibrary "$BUILD/appletvsimulator" "appletvsimulator" "AppleTVSimulator" "" "arm64" "9.0"
 buildLibrary "$BUILD/appletvos" "appletvos" "AppleTVOS" "" "arm64" "9.0"
 buildLibrary "$BUILD/xros" "xros" "XROS" "" "arm64" "17.0"
 buildLibrary "$BUILD/xrossimulator" "xrossimulator" "XRSimulator" "" "arm64" "17.0"
