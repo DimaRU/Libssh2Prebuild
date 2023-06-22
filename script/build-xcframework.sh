@@ -91,21 +91,27 @@ buildLibrary "$BUILD/macosx" "macosx" "MacOSX" "" "x86_64 arm64" "10.10"
 buildLibrary "$BUILD/maccatalyst" "macosx" "MacOSX" "-maccatalyst" "x86_64 arm64" "10.15"
 buildLibrary "$BUILD/appletvsimulator" "appletvsimulator" "AppleTVSimulator" "" "x86_64 arm64" "9.0"
 buildLibrary "$BUILD/appletvos" "appletvos" "AppleTVOS" "" "arm64" "9.0"
+buildLibrary "$BUILD/xros" "xros" "XROS" "" "arm64" "17.0"
+buildLibrary "$BUILD/xrossimulator" "xrossimulator" "XRSimulator" "" "arm64" "17.0"
 
 xcodebuild -create-xcframework \
- -library "$BUILD/macosx/lib/libssh2.a" \
- -headers "$BUILD/macosx/include" \
- -library "$BUILD/iphoneos/lib/libssh2.a" \
- -headers "$BUILD/iphoneos/include" \
- -library "$BUILD/iphonesimulator/lib/libssh2.a" \
- -headers "$BUILD/iphonesimulator/include" \
- -library "$BUILD/maccatalyst/lib/libssh2.a" \
- -headers "$BUILD/maccatalyst/include" \
- -library "$BUILD/appletvsimulator/lib/libssh2.a" \
- -headers "$BUILD/appletvsimulator/include" \
- -library "$BUILD/appletvos/lib/libssh2.a" \
- -headers "$BUILD/appletvos/include" \
- -output CSSH.xcframework
+  -library "$BUILD/macosx/lib/libssh2.a" \
+  -headers "$BUILD/macosx/include" \
+  -library "$BUILD/iphoneos/lib/libssh2.a" \
+  -headers "$BUILD/iphoneos/include" \
+  -library "$BUILD/iphonesimulator/lib/libssh2.a" \
+  -headers "$BUILD/iphonesimulator/include" \
+  -library "$BUILD/maccatalyst/lib/libssh2.a" \
+  -headers "$BUILD/maccatalyst/include" \
+  -library "$BUILD/appletvsimulator/lib/libssh2.a" \
+  -headers "$BUILD/appletvsimulator/include" \
+  -library "$BUILD/appletvos/lib/libssh2.a" \
+  -headers "$BUILD/appletvos/include" \
+  -library "$BUILD/xros/lib/libssh2.a" \
+  -headers "$BUILD/xros/include" \
+  -library "$BUILD/xrossimulator/lib/libssh2.a" \
+  -headers "$BUILD/xrossimulator/include" \
+  -output CSSH.xcframework
 
 XCODE_VER="Archive date:$DATE"
 XCODE_VER+=$'\n'

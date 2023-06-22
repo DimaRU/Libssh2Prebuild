@@ -68,7 +68,12 @@ do
     export BITCODE_GENERATION_MODE=bitcode
     export CFLAGS="$CFLAGS -fembed-bitcode"
 
-    CONF="$CONF -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+    CONF="$CONF"
+
+    # TODO: XROS MIN VERSION
+    if [[ "$SDK_PLATFORM" != "xros" ]] || [[ "$SDK_PLATFORM" != "xros*" ]]; then
+      CONF="$CONF -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+    fi
 
     {
       # split $CONF by space into parameter list
