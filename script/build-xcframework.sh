@@ -53,6 +53,9 @@ autoload is-at-least
 export XCODE_VER=$(xcodebuild -version 2>&1 | awk '/Xcode/{print $2}')
 
 TAG=$LIBSSH_TAG+$LIBSSL_TAG
+if is-at-least "15.0" "$XCODE_VER"; then
+TAG+="+beta"
+fi
 ZIPNAME=CSSH-$TAG.xcframework.zip
 GIT_REMOTE_URL_UNFINISHED=$(git config --get remote.origin.url|sed "s=^ssh://==; s=^https://==; s=:=/=; s/git@//; s/.git$//;")
 DOWNLOAD_URL=https://$GIT_REMOTE_URL_UNFINISHED/releases/download/$TAG/$ZIPNAME
