@@ -137,9 +137,11 @@ xcodebuild -create-xcframework \
  
 fi
 
+XCODE_STRING=$(xcodebuild -version 2>&1| tail -n 2)
+XCODE_STRING=${XCODE_STRING//[$'\t\r\n']/ }
 VERSION_STRING="Archive date:$DATE"
 VERSION_STRING+=$'\n'
-VERSION_STRING+=$(xcodebuild -version 2>&1| tail -n 2)
+VERSION_STRING+="$XCODE_STRING"
 echo $VERSION_STRING
 xczip CSSH.xcframework --iso-date "$DATE" -o $ZIPNAME -c "$VERSION_STRING"
 rm -rf CSSH.xcframework
@@ -166,7 +168,7 @@ EOL
 cat >build/release-note.md << EOL
 Libssh2 $LIBSSH_TAG
 $LIBSSL_TAG
-$(xcodebuild -version 2>&1| tail -n 2)
+$XCODE_STRING
 
 ### Supported platforms and architectures
 | Platform          |  Architectures     |
