@@ -45,8 +45,15 @@ do
     export SDKROOT="$DEVROOT/SDKs/$PLATFORM.sdk"
     export CC="$CLANG"
     export CPP="$CLANG -E"
-    export CFLAGS="-arch $ARCH -pipe -no-cpp-precomp -isysroot $SDKROOT -m$SDK_PLATFORM-version-min=$MIN_VERSION"
-    export CPPFLAGS="-arch $ARCH -pipe -no-cpp-precomp -isysroot $SDKROOT -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+
+    export CFLAGS="-arch $ARCH -pipe -no-cpp-precomp -isysroot $SDKROOT"
+    export CPPFLAGS="-arch $ARCH -pipe -no-cpp-precomp -isysroot $SDKROOT"
+
+    if [[ "$SDK_PLATFORM" != "xros" ]] && [[ "$SDK_PLATFORM" != "xrsimulator" ]]; then
+      export CFLAGS="$CFLAGS -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+      export CPPFLAGS="$CPPFLAGS -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+    fi
+
     if [[ "$EFFECTIVE_PLATFORM_NAME" == "-maccatalyst" ]]; then
         EXTRAFLAGS="-target $ARCH-apple-ios13.1-macabi -Wno-overriding-t-option"
         CFLAGS="${CFLAGS} ${EXTRAFLAGS}"
@@ -59,9 +66,7 @@ do
       CRYPTO_BACKEND_OPTION="--with-openssl"
     fi
 
-    export BITCODE_GENERATION_MODE=bitcode
-    export CFLAGS="$CFLAGS -fembed-bitcode"
-    
+
     {
       {
         ./configure \

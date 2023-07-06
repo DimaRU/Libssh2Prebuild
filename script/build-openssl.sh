@@ -65,10 +65,12 @@ do
     export CROSS_SDK="$PLATFORM.sdk"
     export SDKROOT="$CROSS_TOP/SDKs/$CROSS_SDK"
     export CC="$CLANG -arch $ARCH"
-    export BITCODE_GENERATION_MODE=bitcode
-    export CFLAGS="$CFLAGS -fembed-bitcode"
 
-    CONF="$CONF -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+    CONF="$CONF"
+
+    if [[ "$MIN_VERSION" != "" ]]; then
+      CONF="$CONF -m$SDK_PLATFORM-version-min=$MIN_VERSION"
+    fi
 
     {
       # split $CONF by space into parameter list
