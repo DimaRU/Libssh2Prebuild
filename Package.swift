@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 
@@ -9,7 +9,7 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(name: "CSSH",
-                      url: "https://github.com/DimaRU/Libssh2Prebuild/releases/download/1.11.0+OpenSSL_1_1_1u+beta/CSSH-1.11.0+OpenSSL_1_1_1u+beta.xcframework.zip",
-                      checksum: "7964bb946da1424e2b25497c2cab73185a32c105716c6c69cb622e1cacaa4000")
+                      url: "https://github.com/DimaRU/Libssh2Prebuild/releases/download/1.11.0-OpenSSL-1-1-1w/CSSH-1.11.0-OpenSSL-1-1-1w.xcframework.zip",
+                      checksum: "f2a14236019b617019f522001c89ad5db2125e8f350cbcde5ed6e96f50842157")
     ]
 )
