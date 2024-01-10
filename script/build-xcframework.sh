@@ -59,7 +59,7 @@ if [[ $VISION_OS == 0 ]]; then
 fi
 
 TAG=$LIBSSH_TAG-$LIBSSL_TAG
-TAG=>${str//_/-}
+TAG=${TAG//_/-}
 ZIPNAME=CSSH-$TAG.xcframework.zip
 GIT_REMOTE_URL_UNFINISHED=$(git config --get remote.origin.url|sed "s=^ssh://==; s=^https://==; s=:=/=; s/git@//; s/.git$//;")
 DOWNLOAD_URL=https://$GIT_REMOTE_URL_UNFINISHED/releases/download/$TAG/$ZIPNAME
@@ -123,7 +123,7 @@ xcodebuild -create-xcframework \
   -headers "$BUILD/xros/include" \
   -library "$BUILD/xrsimulator/lib/libssh2.a" \
   -headers "$BUILD/xrsimulator/include" \
-  -output CSSH.xcframework
+  -output $BUILD/CSSH.xcframework
 
 else
 
@@ -140,7 +140,7 @@ xcodebuild -create-xcframework \
  -headers "$BUILD/appletvsimulator/include" \
  -library "$BUILD/appletvos/lib/libssh2.a" \
  -headers "$BUILD/appletvos/include" \
- -output CSSH.xcframework
+ -output $BUILD/CSSH.xcframework
  
 fi
 
@@ -150,9 +150,9 @@ VERSION_STRING="Archive date:$DATE"
 VERSION_STRING+=$'\n'
 VERSION_STRING+="$XCODE_STRING"
 echo $VERSION_STRING
-xczip CSSH.xcframework --iso-date "$DATE" -o $ZIPNAME -c "$VERSION_STRING"
-rm -rf CSSH.xcframework
-CHECKSUM=$(shasum -a 256 -b $ZIPNAME | awk '{print $1}')
+xczip $BUILD/CSSH.xcframework --iso-date "$DATE" -o $BUILD/$ZIPNAME -c "$VERSION_STRING"
+rm -rf $BUILD/CSSH.xcframework
+CHECKSUM=$(shasum -a 256 -b $BUILD/$ZIPNAME | awk '{print $1}')
 
 cat >Package.swift << EOL
 // swift-tools-version:5.6
@@ -172,7 +172,7 @@ let package = Package(
 )
 EOL
 
-cat >build/release-note.md << EOL
+cat >$BUILD/release-note.md << EOL
 Libssh2 $LIBSSH_TAG
 $LIBSSL_TAG
 $XCODE_STRING
@@ -190,7 +190,7 @@ EOL
 
 if [[ $VISION_OS == 0 ]]; then
 
-cat >>build/release-note.md << EOL
+cat >>$BUILD/release-note.md << EOL
 | xrOS              | arm64              |
 | xrOS Simulator    | arm64              |
 EOL
@@ -204,7 +204,7 @@ git commit -m "Build $TAG"
 git tag $TAG
 git push
 git push --tags
-gh release create "$TAG" $ZIPNAME --title "$TAG" --notes-file $ROOT_PATH/build/release-note.md
+gh release create "$TAG" $BUILD/$ZIPNAME --title "$TAG" --notes-file $BUILD/release-note.md
 
 fi
 
