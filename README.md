@@ -14,7 +14,7 @@
 | xrOS*             | arm64              |
 | xrOS Simulator*   | arm64              |
 
-* Xcode 15, now beta
+* Xcode 15
 
 ### Usage
 
