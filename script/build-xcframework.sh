@@ -49,13 +49,17 @@ LIBSSH_TAG=$1
 LIBSSL_TAG=$2
 DATE=$3
 
-autoload is-at-least
-export XCODE_VER=$(xcodebuild -version 2>&1 | awk '/Xcode/{print $2}')
+set +e
+xcodebuild -showsdks | grep -sq visionOS
+VISION_OS=$?
+set -e
 
-TAG=$LIBSSH_TAG+$LIBSSL_TAG
-if is-at-least "15.0" "$XCODE_VER"; then
-TAG+="+beta"
+if [[ $VISION_OS == 0 ]]; then
+    echo Vision OS available
 fi
+
+TAG=$LIBSSH_TAG-$LIBSSL_TAG
+TAG=>${str//_/-}
 ZIPNAME=CSSH-$TAG.xcframework.zip
 GIT_REMOTE_URL_UNFINISHED=$(git config --get remote.origin.url|sed "s=^ssh://==; s=^https://==; s=:=/=; s/git@//; s/.git$//;")
 DOWNLOAD_URL=https://$GIT_REMOTE_URL_UNFINISHED/releases/download/$TAG/$ZIPNAME
@@ -98,7 +102,7 @@ buildLibrary "$BUILD/maccatalyst" "macosx" "MacOSX" "-maccatalyst" "x86_64 arm64
 buildLibrary "$BUILD/appletvsimulator" "appletvsimulator" "AppleTVSimulator" "" "x86_64 arm64" "9.0"
 buildLibrary "$BUILD/appletvos" "appletvos" "AppleTVOS" "" "arm64" "9.0"
 
-if is-at-least "15.0" "$XCODE_VER"; then
+if [[ $VISION_OS == 0 ]]; then
 buildLibrary "$BUILD/xros" "xros" "XROS" "" "arm64" ""
 buildLibrary "$BUILD/xrsimulator" "xrsimulator" "XRSimulator" "" "arm64" ""
 
@@ -151,7 +155,7 @@ rm -rf CSSH.xcframework
 CHECKSUM=$(shasum -a 256 -b $ZIPNAME | awk '{print $1}')
 
 cat >Package.swift << EOL
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 
@@ -184,7 +188,7 @@ $XCODE_STRING
 | Maccatalyst       | x86_64 arm64       |
 EOL
 
-if is-at-least "15.0" "$XCODE_VER"; then
+if [[ $VISION_OS == 0 ]]; then
 
 cat >>build/release-note.md << EOL
 | xrOS              | arm64              |
